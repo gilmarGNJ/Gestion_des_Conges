@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const legendDiv = document.getElementById('legend');
     const saveDataButton = document.getElementById('save-data');
     const loadDataInput = document.getElementById('load-data-input');
+    const reloadInitialDataButton = document.getElementById('reload-initial-data');
 
     const years = [2024, 2025, 2026, 2027];
     const currentYear = new Date().getFullYear();
@@ -18,9 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
         2027: { CP: 15, RTTs: 12.5, JS: 1 }
     };
 
-    let holidayData = JSON.parse(localStorage.getItem('holidayData')) || {};
+    let holidayData = {};
 
-    function initialize() {
+    async function initialize() {
+        const localData = localStorage.getItem('holidayData');
+        if (localData) {
+            holidayData = JSON.parse(localData);
+        } else {
+            await loadInitialData();
+        }
+        
         populateYearSelect();
         yearSelect.value = years.includes(currentYear) ? currentYear : years[0];
         renderAll();
@@ -248,6 +256,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return Object.keys(holidayData).filter(date => date.startsWith(year) && holidayData[date] === type).length;
     }
 
+    async function loadInitialData() {
+        try {
+            const response = await fetch('holidays-data.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (typeof data === 'object' && data !== null) {
+                holidayData = data;
+                localStorage.setItem('holidayData', JSON.stringify(holidayData));
+            } else {
+                alert('Fichier holidays-data.json invalide.');
+            }
+        } catch (error) {
+            alert('Erreur lors du chargement des données initiales : ' + error.message);
+            holidayData = {}; // Fallback to empty data
+        }
+    }
+
     function addEventListeners() {
         yearSelect.addEventListener('change', () => {
             renderCalendar(parseInt(yearSelect.value));
@@ -269,6 +296,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         saveDataButton.addEventListener('click', saveData);
         loadDataInput.addEventListener('change', loadData);
+        reloadInitialDataButton.addEventListener('click', async () => {
+            if (confirm("Voulez-vous vraiment recharger les données initiales ? Toutes les modifications non sauvegardées seront perdues.")) {
+                await loadInitialData();
+                renderAll();
+                alert('Données initiales rechargées avec succès !');
+            }
+        });
     }
 
     initialize();
