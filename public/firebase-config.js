@@ -2,7 +2,7 @@
 // service-account files or OAuth client secrets to this repository.
 
 export const firebaseConfig = Object.freeze({
-  apiKey: "AIzaSyBu_0T4IoLULOTXI63ltYixTRb5qUmqWJw",
+  apiKey: "AIzaSyBN5vSuw4RewuXlKm-fa_4hs5UWmEz_QSM",
   authDomain: "gestion-des-conges-9bbb6.web.app",
   projectId: "gestion-des-conges-9bbb6",
   storageBucket: "gestion-des-conges-9bbb6.firebasestorage.app",
@@ -15,3 +15,4 @@ export const firebasePublicOptions = Object.freeze({
   rememberSession: false,
   appCheckSiteKey: "",
 });
+
