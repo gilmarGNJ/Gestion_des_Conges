@@ -1,0 +1,45 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          { "key": "Permissions-Policy", "value": "camera=(), geolocation=(), microphone=(), payment=(), usb=()" }
+        ]
+      },
+      {
+        "source": "/",
+        "headers": [
+          { "key": "Content-Security-Policy", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://accounts.google.com https://gestion-des-conges-9bbb6.web.app; script-src 'self' https://www.gstatic.com https://apis.google.com https://www.google.com; style-src 'self'; img-src 'self' data: https://www.gstatic.com https://www.google.com; font-src 'self'; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://content-firebaseappcheck.googleapis.com https://gestion-des-conges-9bbb6.web.app https://apis.google.com https://www.google.com; frame-src 'self' https://gestion-des-conges-9bbb6.web.app https://accounts.google.com https://apis.google.com https://www.google.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests" },
+          { "key": "X-Frame-Options", "value": "DENY" }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [
+          { "key": "Content-Security-Policy", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://accounts.google.com https://gestion-des-conges-9bbb6.web.app; script-src 'self' https://www.gstatic.com https://apis.google.com https://www.google.com; style-src 'self'; img-src 'self' data: https://www.gstatic.com https://www.google.com; font-src 'self'; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://content-firebaseappcheck.googleapis.com https://gestion-des-conges-9bbb6.web.app https://apis.google.com https://www.google.com; frame-src 'self' https://gestion-des-conges-9bbb6.web.app https://accounts.google.com https://apis.google.com https://www.google.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests" },
+          { "key": "X-Frame-Options", "value": "DENY" }
+        ]
+      },
+      {
+        "source": "/firebase-config.js",
+        "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+      },
+      {
+        "source": "/data/seed-data.json",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      }
+    ]
+  }
+}

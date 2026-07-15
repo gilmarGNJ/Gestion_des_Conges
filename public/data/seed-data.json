@@ -1,0 +1,327 @@
+{
+  "version": 2,
+  "seedVersion": 20260715,
+  "contractStart": "2024-01-01",
+  "contractEnd": "2027-12-31",
+  "yearSettings": {
+    "2024": {
+      "cpAcquired": 0,
+      "cpCarryOver": 0,
+      "rttAcquired": 0,
+      "solidarityDays": 0
+    },
+    "2025": {
+      "cpAcquired": 0,
+      "cpCarryOver": 0,
+      "rttAcquired": 0,
+      "solidarityDays": 0
+    },
+    "2026": {
+      "cpAcquired": 0,
+      "cpCarryOver": 0,
+      "rttAcquired": 0,
+      "solidarityDays": 0
+    },
+    "2027": {
+      "cpAcquired": 0,
+      "cpCarryOver": 0,
+      "rttAcquired": 0,
+      "solidarityDays": 0
+    }
+  },
+  "officialDays": {
+    "2024-01-01": {
+      "type": "holiday",
+      "label": "Jour de l’An"
+    },
+    "2024-04-01": {
+      "type": "holiday",
+      "label": "Lundi de Pâques"
+    },
+    "2024-05-01": {
+      "type": "holiday",
+      "label": "Fête du Travail"
+    },
+    "2024-05-08": {
+      "type": "holiday",
+      "label": "Victoire 1945"
+    },
+    "2024-05-09": {
+      "type": "holiday",
+      "label": "Ascension"
+    },
+    "2024-05-10": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2024-05-20": {
+      "type": "holiday",
+      "label": "Lundi de Pentecôte"
+    },
+    "2024-07-14": {
+      "type": "holiday",
+      "label": "Fête nationale"
+    },
+    "2024-08-15": {
+      "type": "holiday",
+      "label": "Assomption"
+    },
+    "2024-08-16": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA Grenoble"
+    },
+    "2024-10-31": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA Grenoble"
+    },
+    "2024-11-01": {
+      "type": "holiday",
+      "label": "Toussaint"
+    },
+    "2024-11-11": {
+      "type": "holiday",
+      "label": "Armistice 1918"
+    },
+    "2024-12-23": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2024-12-24": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2024-12-25": {
+      "type": "holiday",
+      "label": "Noël"
+    },
+    "2024-12-26": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2024-12-27": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2024-12-30": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2024-12-31": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2025-01-01": {
+      "type": "holiday",
+      "label": "Jour de l’An"
+    },
+    "2025-04-21": {
+      "type": "holiday",
+      "label": "Lundi de Pâques"
+    },
+    "2025-05-01": {
+      "type": "holiday",
+      "label": "Fête du Travail"
+    },
+    "2025-05-02": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2025-05-08": {
+      "type": "holiday",
+      "label": "Victoire 1945"
+    },
+    "2025-05-09": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2025-05-29": {
+      "type": "holiday",
+      "label": "Ascension"
+    },
+    "2025-05-30": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA Grenoble"
+    },
+    "2025-06-09": {
+      "type": "holiday",
+      "label": "Lundi de Pentecôte"
+    },
+    "2025-07-14": {
+      "type": "holiday",
+      "label": "Fête nationale"
+    },
+    "2025-08-15": {
+      "type": "holiday",
+      "label": "Assomption"
+    },
+    "2025-11-01": {
+      "type": "holiday",
+      "label": "Toussaint"
+    },
+    "2025-11-11": {
+      "type": "holiday",
+      "label": "Armistice 1918"
+    },
+    "2025-12-24": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2025-12-25": {
+      "type": "holiday",
+      "label": "Noël"
+    },
+    "2025-12-26": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2025-12-29": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2025-12-30": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2025-12-31": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2026-01-01": {
+      "type": "holiday",
+      "label": "Jour de l’An"
+    },
+    "2026-01-02": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2026-04-06": {
+      "type": "holiday",
+      "label": "Lundi de Pâques"
+    },
+    "2026-05-01": {
+      "type": "holiday",
+      "label": "Fête du Travail"
+    },
+    "2026-05-08": {
+      "type": "holiday",
+      "label": "Victoire 1945"
+    },
+    "2026-05-14": {
+      "type": "holiday",
+      "label": "Ascension"
+    },
+    "2026-05-15": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2026-05-25": {
+      "type": "holiday",
+      "label": "Lundi de Pentecôte"
+    },
+    "2026-07-13": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA Grenoble"
+    },
+    "2026-07-14": {
+      "type": "holiday",
+      "label": "Fête nationale"
+    },
+    "2026-08-14": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2026-08-15": {
+      "type": "holiday",
+      "label": "Assomption"
+    },
+    "2026-11-01": {
+      "type": "holiday",
+      "label": "Toussaint"
+    },
+    "2026-11-11": {
+      "type": "holiday",
+      "label": "Armistice 1918"
+    },
+    "2026-12-25": {
+      "type": "holiday",
+      "label": "Noël"
+    },
+    "2026-12-28": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2026-12-29": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2026-12-30": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2026-12-31": {
+      "type": "rtt-impose",
+      "label": "JRTT imposé CEA"
+    },
+    "2027-01-01": {
+      "type": "holiday",
+      "label": "Jour de l’An"
+    },
+    "2027-03-29": {
+      "type": "holiday",
+      "label": "Lundi de Pâques"
+    },
+    "2027-05-01": {
+      "type": "holiday",
+      "label": "Fête du Travail"
+    },
+    "2027-05-06": {
+      "type": "holiday",
+      "label": "Ascension"
+    },
+    "2027-05-08": {
+      "type": "holiday",
+      "label": "Victoire 1945"
+    },
+    "2027-05-17": {
+      "type": "holiday",
+      "label": "Lundi de Pentecôte"
+    },
+    "2027-07-14": {
+      "type": "holiday",
+      "label": "Fête nationale · fin du contrat"
+    }
+  },
+  "customDays": {},
+  "deletedCustomDays": [],
+  "absenceRequests": [],
+  "deletedRequestIds": [],
+  "sources": [
+    {
+      "id": "service-public-holidays",
+      "label": "Service Public — jours fériés 2026 et 2027",
+      "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2405"
+    },
+    {
+      "id": "cea-rtt-2024",
+      "label": "Accord CEA Grenoble — fermetures 2024",
+      "url": "https://www.maitredata.com/app/accords-entreprise/cea-grenoble/272082"
+    },
+    {
+      "id": "cea-rtt-2025",
+      "label": "Accord CEA Grenoble — fermetures 2025",
+      "url": "https://www.maitredata.com/app/accords-entreprise/cea-grenoble/319016"
+    },
+    {
+      "id": "cea-rtt-2026",
+      "label": "Accord CEA Grenoble — fermetures 2026",
+      "url": "https://www.maitredata.com/app/accords-entreprise/cea-grenoble/368234"
+    }
+  ],
+  "notices": [
+    {
+      "id": "rtt-2027-pending",
+      "level": "info",
+      "text": "Les JRTT imposés CEA Grenoble pour 2027 ne sont pas encore publiés. Les dates seront à vérifier après les accords d’octobre–novembre 2026."
+    }
+  ]
+}
