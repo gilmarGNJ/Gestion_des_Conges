@@ -459,6 +459,42 @@ tbody tr:hover td {
   font-weight: 850;
 }
 
+#summary-table-container table th:nth-child(5),
+#summary-table-container table td:nth-child(5) {
+  border-left: 3px solid var(--forest-2);
+}
+
+#summary-table-container table th:nth-child(10),
+#summary-table-container table td:nth-child(10) {
+  border-left: 3px solid var(--forest-2);
+}
+
+#summary-table-container table thead th:nth-child(2),
+#summary-table-container table thead th:nth-child(3),
+#summary-table-container table thead th:nth-child(4) {
+  background: color-mix(in srgb, var(--cp-bg) 68%, var(--surface));
+}
+
+#summary-table-container table thead th:nth-child(5),
+#summary-table-container table thead th:nth-child(6),
+#summary-table-container table thead th:nth-child(7),
+#summary-table-container table thead th:nth-child(8),
+#summary-table-container table thead th:nth-child(9) {
+  background: color-mix(in srgb, var(--rtt-bg) 68%, var(--surface));
+}
+
+#summary-table-container table thead th:nth-child(10) {
+  background: color-mix(in srgb, var(--forest-3) 72%, var(--surface));
+}
+
+#summary-table-container table tfoot th,
+#summary-table-container table tfoot td {
+  border-top: 2px solid var(--forest-2);
+  border-bottom: 0;
+  background: var(--surface-soft);
+  font-weight: 850;
+}
+
 .negative {
   color: var(--danger);
 }
@@ -1145,3 +1181,4 @@ tbody tr:hover td {
     transition-duration: 0.01ms !important;
   }
 }
+
