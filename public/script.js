@@ -16,7 +16,7 @@ import {
   toIsoDate,
   typeLabel,
   validateImport
-} from "./logic.js";
+} from "./logic.js?v=20260715n";
 
 const STORAGE_KEY = "gestionCongesStateV2";
 const LEGACY_STORAGE_KEY = "holidayData";
@@ -67,7 +67,6 @@ const elements = {
   rightsContractStart: document.querySelector("#rights-contract-start"),
   rightsContractEnd: document.querySelector("#rights-contract-end"),
   rightsCp: document.querySelector("#rights-cp"),
-  rightsCarry: document.querySelector("#rights-carry"),
   rightsRtt: document.querySelector("#rights-rtt"),
   rightsSolidarity: document.querySelector("#rights-solidarity"),
   toastRegion: document.querySelector("#toast-region")
@@ -237,7 +236,24 @@ function renderNotices() {
 
 function renderSummary() {
   const selectedYear = Number(elements.yearSelect.value);
-  const summaries = years.map((year) => calculateYearSummary(appState, year));
+  // Normalize the values used for display here as a safeguard against an
+  // older cached calculation module. CP is deliberately not carried over
+  // between years: each year's balance is its own acquired rights minus days
+  // taken in that year. The same derived values feed cards, rows and totals.
+  const summaries = years.map((year) => {
+    const summary = calculateYearSummary(appState, year);
+    const cpRemaining = Number(summary.cpAcquired || 0) - Number(summary.cpTaken || 0);
+    const rttRemaining = Number(summary.rttAcquired || 0)
+      - Number(summary.rttImposed || 0)
+      - Number(summary.solidarityDays || 0)
+      - Number(summary.rttTaken || 0);
+    return {
+      ...summary,
+      cpRemaining,
+      rttRemaining,
+      totalRemaining: cpRemaining + rttRemaining
+    };
+  });
   elements.summaryCards.innerHTML = summaries
     .map((summary) => {
       const currentBadge = summary.year === selectedYear ? "<span>affichée</span>" : "";
@@ -264,7 +280,6 @@ function renderSummary() {
         <tr>
           <th scope="row">${summary.year}</th>
           <td class="number-cell">${formatDays(summary.cpAcquired)}</td>
-          <td class="number-cell">${formatDays(summary.cpCarryOver)}</td>
           <td class="number-cell">${formatDays(summary.cpTaken)}</td>
           <td class="number-cell remaining-cell ${summary.cpRemaining < 0 ? "negative" : ""}">${formatDays(summary.cpRemaining)}</td>
           <td class="number-cell">${formatDays(summary.rttAcquired)}</td>
@@ -272,9 +287,35 @@ function renderSummary() {
           <td class="number-cell">${formatDays(summary.solidarityDays)}</td>
           <td class="number-cell">${formatDays(summary.rttTaken)}</td>
           <td class="number-cell remaining-cell ${summary.rttRemaining < 0 ? "negative" : ""}">${formatDays(summary.rttRemaining)}</td>
+          <td class="number-cell remaining-cell ${summary.totalRemaining < 0 ? "negative" : ""}">${formatDays(summary.totalRemaining)}</td>
         </tr>`
     )
     .join("");
+
+  const totals = summaries.reduce(
+    (total, summary) => ({
+      cpAcquired: total.cpAcquired + summary.cpAcquired,
+      cpTaken: total.cpTaken + summary.cpTaken,
+      cpRemaining: total.cpRemaining + summary.cpRemaining,
+      rttAcquired: total.rttAcquired + summary.rttAcquired,
+      rttImposed: total.rttImposed + summary.rttImposed,
+      solidarityDays: total.solidarityDays + summary.solidarityDays,
+      rttTaken: total.rttTaken + summary.rttTaken,
+      rttRemaining: total.rttRemaining + summary.rttRemaining,
+      totalRemaining: total.totalRemaining + summary.totalRemaining
+    }),
+    {
+      cpAcquired: 0,
+      cpTaken: 0,
+      cpRemaining: 0,
+      rttAcquired: 0,
+      rttImposed: 0,
+      solidarityDays: 0,
+      rttTaken: 0,
+      rttRemaining: 0,
+      totalRemaining: 0
+    }
+  );
 
   elements.summaryTable.innerHTML = `
     <table>
@@ -283,7 +324,6 @@ function renderSummary() {
         <tr>
           <th scope="col">Année</th>
           <th scope="col">CP acquis</th>
-          <th scope="col">Report CP</th>
           <th scope="col">CP pris</th>
           <th scope="col">CP restants</th>
           <th scope="col">RTT acquis</th>
@@ -291,10 +331,26 @@ function renderSummary() {
           <th scope="col">Solidarité</th>
           <th scope="col">RTT pris</th>
           <th scope="col">RTT restants</th>
+          <th scope="col">Total restant</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
+      <tfoot>
+        <tr>
+          <th scope="row">Total général</th>
+          <td class="number-cell">${formatDays(totals.cpAcquired)}</td>
+          <td class="number-cell">${formatDays(totals.cpTaken)}</td>
+          <td class="number-cell remaining-cell ${totals.cpRemaining < 0 ? "negative" : ""}">${formatDays(totals.cpRemaining)}</td>
+          <td class="number-cell">${formatDays(totals.rttAcquired)}</td>
+          <td class="number-cell">${formatDays(totals.rttImposed)}</td>
+          <td class="number-cell">${formatDays(totals.solidarityDays)}</td>
+          <td class="number-cell">${formatDays(totals.rttTaken)}</td>
+          <td class="number-cell remaining-cell ${totals.rttRemaining < 0 ? "negative" : ""}">${formatDays(totals.rttRemaining)}</td>
+          <td class="number-cell remaining-cell ${totals.totalRemaining < 0 ? "negative" : ""}">${formatDays(totals.totalRemaining)}</td>
+        </tr>
+      </tfoot>
     </table>`;
+  elements.summaryTable.querySelector("caption").textContent = "Les soldes sont calculés dans chaque année, sans report automatique de CP.";
 }
 
 function renderLegend() {
@@ -613,7 +669,6 @@ function loadRightsFormValues() {
   elements.rightsContractStart.value = appState.contractStart;
   elements.rightsContractEnd.value = appState.contractEnd;
   elements.rightsCp.value = settings.cpAcquired;
-  elements.rightsCarry.value = settings.cpCarryOver;
   elements.rightsRtt.value = settings.rttAcquired;
   elements.rightsSolidarity.value = settings.solidarityDays;
 }
@@ -639,7 +694,6 @@ async function handleRightsFormSubmit(event) {
   appState.contractEnd = contractEnd;
   appState.yearSettings[year] = {
     cpAcquired: Number(elements.rightsCp.value),
-    cpCarryOver: Number(elements.rightsCarry.value),
     rttAcquired: Number(elements.rightsRtt.value),
     solidarityDays: Number(elements.rightsSolidarity.value)
   };
@@ -1132,3 +1186,4 @@ window.addEventListener("beforeunload", () => {
 });
 
 initialize();
+
