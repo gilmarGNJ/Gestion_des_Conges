@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#163b35">
+    <meta name="description" content="Calendrier personnel des congés, RTT et fermetures du CEA Grenoble.">
+    <title>Gestion des congés · CEA Grenoble</title>
+    <link rel="stylesheet" href="style.css?v=20260715e">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Aller au contenu</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">GC</div>
+          <div>
+            <p class="eyebrow">CEA Grenoble · suivi personnel</p>
+            <h1>Gestion des congés</h1>
+            <p class="header-copy">Droits, absences et jours de fermeture, synchronisés de façon sécurisée.</p>
+          </div>
+        </div>
+
+        <div class="sync-panel" aria-label="État de la synchronisation">
+          <span id="sync-status" class="sync-status" data-state="local">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="sync-status-text">Mode local</span>
+          </span>
+          <button id="sync-button" class="button button-light" type="button">Activer la synchro</button>
+          <button id="sign-out-button" class="button button-ghost is-hidden" type="button">Déconnexion et effacement</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="page-shell">
+      <section id="notices" class="notice-stack" aria-live="polite"></section>
+
+      <section class="section-card summary-section" aria-labelledby="summary-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Vue d’ensemble</p>
+            <h2 id="summary-title">Soldes annuels</h2>
+          </div>
+          <button id="edit-rights-button" class="button button-secondary" type="button">Ajuster les droits</button>
+        </div>
+        <div id="summary-cards" class="summary-cards"></div>
+        <div id="summary-table-container" class="table-scroll"></div>
+      </section>
+
+      <section class="section-card calendar-section" aria-labelledby="calendar-title">
+        <div class="section-heading calendar-heading">
+          <div>
+            <p class="section-kicker">Planning</p>
+            <h2 id="calendar-title">Calendrier</h2>
+          </div>
+          <div class="year-navigation" aria-label="Choisir l’année">
+            <button id="prev-year" class="icon-button" type="button" aria-label="Année précédente">←</button>
+            <label class="sr-only" for="year-select">Année affichée</label>
+            <select id="year-select"></select>
+            <button id="next-year" class="icon-button" type="button" aria-label="Année suivante">→</button>
+          </div>
+        </div>
+
+        <div id="legend" class="legend" aria-label="Légende du calendrier"></div>
+        <p class="calendar-help">Sélectionnez un jour ouvré pour ajouter ou modifier une absence personnelle. Les jours officiels sont verrouillés.</p>
+        <div id="calendar" class="calendar-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="section-card requests-section" aria-labelledby="requests-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Historique</p>
+            <h2 id="requests-title">Demandes d’absence</h2>
+          </div>
+          <button id="add-request-button" class="button button-primary" type="button">Ajouter une demande</button>
+        </div>
+
+        <div class="filters" aria-label="Filtrer les demandes">
+          <label>
+            Année
+            <select id="request-year-filter">
+              <option value="all">Toutes</option>
+            </select>
+          </label>
+          <label>
+            Type
+            <select id="request-type-filter">
+              <option value="all">Tous les types</option>
+              <option value="conge-paye">Congés payés annuels</option>
+              <option value="rtt">Réduction Temps Travail</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="requests-table-container" class="table-scroll"></div>
+      </section>
+
+      <section class="section-card data-section" aria-labelledby="data-title">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="section-kicker">Sécurité</p>
+            <h2 id="data-title">Sauvegarde et sources</h2>
+          </div>
+        </div>
+
+        <div class="data-grid">
+          <div>
+            <h3>Copie de secours</h3>
+            <p>Exportez une copie complète avant une modification importante. L’import accepte aussi l’ancien format du site.</p>
+            <div class="button-row">
+              <button id="export-data" class="button button-secondary" type="button">Exporter en JSON</button>
+              <label class="button button-secondary button-file">
+                Importer un JSON
+                <input id="import-data-input" class="visually-hidden-input" type="file" accept="application/json,.json">
+              </label>
+              <button id="reset-data" class="button button-danger-quiet" type="button">Rétablir les données initiales</button>
+            </div>
+          </div>
+          <div>
+            <h3>Sources vérifiées</h3>
+            <ul id="sources-list" class="sources-list"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Calendrier personnel · Les JRTT imposés 2027 restent à confirmer.</p>
+    </footer>
+
+    <dialog id="day-dialog" class="modal" aria-labelledby="day-dialog-title">
+      <form id="day-form" method="dialog">
+        <div class="modal-heading">
+          <div>
+            <p class="section-kicker">Modifier le jour</p>
+            <h2 id="day-dialog-title">Date</h2>
+          </div>
+          <button class="icon-button close-dialog" type="button" aria-label="Fermer">×</button>
+        </div>
+        <input id="day-date" type="hidden">
+        <fieldset class="choice-grid">
+          <legend>Type d’absence</legend>
+          <label><input type="radio" name="day-type" value="conge-paye"> <span class="choice-dot conge-paye"></span>Congé payé</label>
+          <label><input type="radio" name="day-type" value="rtt"> <span class="choice-dot rtt"></span>RTT</label>
+          <label><input type="radio" name="day-type" value="rtt-half"> <span class="choice-dot rtt-half"></span>RTT demi-journée</label>
+          <label><input type="radio" name="day-type" value="none"> <span class="choice-dot none"></span>Aucune absence</label>
+        </fieldset>
+        <div class="modal-actions">
+          <button class="button button-secondary close-dialog" type="button">Annuler</button>
+          <button class="button button-primary" value="save" type="submit">Enregistrer</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="request-dialog" class="modal modal-wide" aria-labelledby="request-dialog-title">
+      <form id="request-form" method="dialog">
+        <div class="modal-heading">
+          <div>
+            <p class="section-kicker">Nouvelle entrée</p>
+            <h2 id="request-dialog-title">Ajouter une demande</h2>
+          </div>
+          <button class="icon-button close-dialog" type="button" aria-label="Fermer">×</button>
+        </div>
+
+        <div class="form-grid">
+          <label>Date de demande<input id="request-date" name="requestedAt" type="date" required></label>
+          <label>Type d’absence
+            <select id="request-type" name="type" required>
+              <option value="rtt">Réduction Temps Travail</option>
+              <option value="conge-paye">Congés payés annuels</option>
+            </select>
+          </label>
+          <label>Premier jour<input id="request-first-day" name="firstDay" type="date" required></label>
+          <label>Dernier jour<input id="request-last-day" name="lastDay" type="date" required></label>
+          <label>Nombre de jours<input id="request-days" name="days" type="number" min="0.5" step="0.5" required></label>
+          <label>Statut<input id="request-status-input" name="status" type="text" value="Absence prise en compte" required></label>
+        </div>
+        <p id="request-form-help" class="form-help">Le nombre de jours ouvrés est calculé automatiquement et reste modifiable.</p>
+        <div class="modal-actions">
+          <button class="button button-secondary close-dialog" type="button">Annuler</button>
+          <button class="button button-primary" value="save" type="submit">Ajouter</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="rights-dialog" class="modal" aria-labelledby="rights-dialog-title">
+      <form id="rights-form" method="dialog">
+        <div class="modal-heading">
+          <div>
+            <p class="section-kicker">Paramètres</p>
+            <h2 id="rights-dialog-title">Ajuster les droits</h2>
+          </div>
+          <button class="icon-button close-dialog" type="button" aria-label="Fermer">×</button>
+        </div>
+        <div class="form-grid one-column">
+          <label>Année<select id="rights-year"></select></label>
+          <label>Début du contrat<input id="rights-contract-start" type="date" required></label>
+          <label>Fin du contrat<input id="rights-contract-end" type="date" required></label>
+          <label>CP acquis<input id="rights-cp" type="number" min="0" step="0.5" required></label>
+          <label>RTT acquis<input id="rights-rtt" type="number" min="0" step="0.5" required></label>
+          <label>Journée de solidarité<input id="rights-solidarity" type="number" min="0" step="0.5" required></label>
+        </div>
+        <div class="modal-actions">
+          <button class="button button-secondary close-dialog" type="button">Annuler</button>
+          <button class="button button-primary" value="save" type="submit">Enregistrer</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="sync-conflict-dialog" class="modal" aria-labelledby="sync-conflict-dialog-title">
+      <form id="sync-conflict-form">
+        <div class="modal-heading">
+          <div>
+            <p class="section-kicker">Protection des données</p>
+            <h2 id="sync-conflict-dialog-title">Deux versions doivent être départagées</h2>
+          </div>
+        </div>
+        <div class="privacy-warning" role="alert">
+          <strong>Aucune version ne sera écrasée sans votre accord.</strong>
+          <p>Cet appareil contient des modifications non synchronisées, tandis qu’une version existe déjà dans le cloud.</p>
+        </div>
+        <div class="decision-grid">
+          <button class="button button-primary" type="submit" value="remote">Utiliser la version cloud</button>
+          <p>Remplace la copie locale de cet appareil par la version actuellement enregistrée dans le cloud.</p>
+          <button class="button button-danger-quiet" type="submit" value="local">Remplacer le cloud par cet appareil</button>
+          <p>Écrase explicitement la version cloud avec la copie présente sur cet appareil.</p>
+        </div>
+        <div class="modal-actions">
+          <button class="button button-secondary" type="submit" value="cancel">Décider plus tard</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="sign-out-dialog" class="modal" aria-labelledby="sign-out-dialog-title">
+      <form id="sign-out-form">
+        <div class="modal-heading">
+          <div>
+            <p class="section-kicker">Confidentialité</p>
+            <h2 id="sign-out-dialog-title">Déconnecter et effacer cet appareil ?</h2>
+          </div>
+          <button class="icon-button close-dialog" type="button" aria-label="Fermer">×</button>
+        </div>
+        <div class="privacy-warning" role="alert">
+          <strong>La session sera fermée et la copie privée locale sera supprimée.</strong>
+          <p>Les données actives, anciennes copies et sauvegardes locales de cette application seront effacées de cet appareil. La version cloud ne sera pas supprimée et l’écran reviendra au calendrier public vide.</p>
+        </div>
+        <div class="modal-actions">
+          <button class="button button-secondary close-dialog" type="button">Annuler</button>
+          <button id="confirm-sign-out-button" class="button button-danger" type="submit">Déconnecter et effacer</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <script type="module" src="script.js?v=20260715n"></script>
+  </body>
+</html>
+
